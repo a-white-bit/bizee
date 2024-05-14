@@ -15,7 +15,7 @@
 > 현재 프로젝트에 데이터베이스는 사용되지 않습니다. (서버 종료시 일정 기록이 사라집니다.)
 > 
 > 본 프로젝트는 내일배움캠프 과제로 사용되었습니다.
-
+> 
 ## 요구사항
 
 > ### 기능 요구사항
@@ -57,7 +57,8 @@
 ## Use Case Diagram
 
 <details>
-<summary>자세히</summary>
+<summary>다이어그램</summary>
+<img src="src/main/resources/images/usecase.png" alt="Usecase">
 </details>
 
 <br>
