@@ -16,13 +16,13 @@ public class Schedule {
     private String content;
     private String responsibility;
     private String passKey;
-    private LocalDate creationDate;
+    private String creationDate;
 
     public Schedule(ScheduleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.responsibility = requestDto.getResponsibility();
         this.passKey = requestDto.getPassKey();
-        this.creationDate = LocalDate.now();
+        this.creationDate = requestDto.getCreationDate();
     }
 }

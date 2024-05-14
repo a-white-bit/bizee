@@ -11,7 +11,7 @@ public class ScheduleResponseDto {
     private String content;
     private String responsibility;
     private String passKey;
-    private LocalDate creationDate;
+    private String creationDate;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.title = schedule.getTitle();

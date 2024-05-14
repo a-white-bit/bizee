@@ -1,4 +1,4 @@
-# 🥣Bizee : 일정 관리 앱 서버
+# 🥣 _Bizee_ : 일정 관리 앱 서버
 
 ## 개요
 
@@ -48,7 +48,7 @@
 > ### 프로그래밍 요구사항
 >
 > 1. Spring Boot를 사용하여 CRUD 기능이 포함된 REST API를 설계합니다.
-> 2. 수정, 삭제 API 요청(reqeust) 방식은 (body) 방법을 사용합니다.
+> 2. 수정, 삭제 API 요청(reqeust) 방식은 **body** 방법을 사용합니다.
 > 3. Entity를 그대로 반환하지 않습니다. (DTO를 사용)
 
 
@@ -56,20 +56,18 @@
 
 ## Use Case Diagram
 
-<details>
-<summary>다이어그램</summary>
 <img src="src/main/resources/images/usecase.png" alt="Usecase">
-</details>
+
 
 <br>
 
-## API
+## API 명세
 
 
 |    기능     | Method |      URL       |                                       request                                        |                                                   response                                                   |
 |:---------:|:------:|:--------------:|:------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
 |   일정 등록   |  POST  |   /schedule    | { 'title':제목, 'content':내용, 'responsibility':담당자, 'passkey':암호, 'creationData':작성일 } |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
-|   일정 조회   |  GET   | /schedule/{id} |                                            id: 등록번호                                  |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
+|   일정 조회   |  GET   | /schedule/{id} |                                           등록번호                                       |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
 | 일정 전체 조회  |  GET   |   /schedule    |                                                                                      | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }, ..] } |
 |   일정 수정   |  PUT   |   /schedule    |      { 'id':등록번호, title':제목, 'content':내용, 'responsibility':담당자, 'passkey':암호 }      |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
 |   일정 삭제   | DELETE |   /schedule    |                             { 'id':등록번호, 'passkey':암호 }                              |                                                { 'id':등록번호 }                                                 |
@@ -78,11 +76,9 @@
 
 <br>
 
-## ERD
+## Entity-Relation Diagram
 
-<details>
-<summary>자세히</summary>
-</details>
+<img src="src/main/resources/images/erd.png" alt="ER">
 
 <br>
 
@@ -90,7 +86,43 @@
 <details>
 <summary>자세히</summary>
 
-1. 
+
+### 1. Model Entity, DTO 구현
+    - 작성한 ERD를 참고하여 Entity 구현
+    - RequestDto: 클라이언트 리소스 정보를 담은 객체, 기능별 API에 맞는 constructor를 구현
+    - ResponseDto: 클라이언트에게 전달할 리소스 정보를 담은 객체, 기능별 API에 맞는 정보만 객체에 담아 리턴
+
+### 2. 등록 구현 (POST)
+    - http payload로 JSON 형식 데이터가 전달됨 -> @RequestBody 사용
+    - Schedule 객체를 담는 Map 컬렉션 존재
+    - Map의 key인 등록번호(id)는 순차적 생성
+    - Schedule 객체를 ResponseDto를 통해 반환 (passkey 제외)
+
+### 3. 조회 구현 (GET)
+    - url에 path variable(id)이 전달됨 -> @PathVariable 사용
+    - Map에서 id에 해당하는 Schedule을  ResponseDto을 통해 반환 (passkey 제외)
+
+    - 예외상황 ) 잘못된 id값
+
+### 4. 전체 조회 구현 (GET)
+    - 클라이언트 전달 데이터가 없음
+    - Schedule 정보가 있는 Map 컬렉션을  List<ResponseDto>로 매핑해 반환 (passkey 제외)
+
+### 5. 수정 구현 (PUT)
+    - http payload로 JSON 형식 데이터가 전달됨 -> @RequestBody 사용
+    - Map에서 id에 해당하는 Schedule을 찾아 passkey가 일치하는지 확인
+    - 일치하면 내용을 update
+    - update된 Schedule 인스턴스를 ResponseDto를 통해 반환 (passkey 제외)
+
+    - 예외상황 ) 1. 잘못된 id값  2. passkey 불일치
+
+### 6. 삭제 구현 (DELETE)
+    - http payload로 JSON 형식 데이터가 전달됨 -> @RequestBody 사용
+    - Map에서 id에 해당하는 Schedule을 찾아 passkey가 일치하는지 확인
+    - 일치하면 인스턴스 제거
+    - 제거에 성공하면 id를 반환
+
+    - 예외상황 ) 1. 잘못된 id값,  2. passkey 불일치
 
 </details>
 

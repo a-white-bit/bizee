@@ -10,6 +10,7 @@ public class ScheduleRequestDto {
     private String content;
     private String responsibility;
     private String passKey;
+    private String creationDate;
 
     public ScheduleRequestDto(String title) {
         this.title = title;
