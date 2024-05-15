@@ -18,11 +18,12 @@ public class ScheduleController {
     // Schedule 인스턴스 저장소
     private final Map<Integer, Schedule> scheduleList = new HashMap<>();
 
-
-    // @RequestParam: url path에 추가된 쿼리스트링 받기
-    // @RequestBody: html body로 JSON 받아오기
-    // @VariablePath: url path로 받기
-
+    /* -------------(학습용 메모)---------------
+    * Controller Parameter Annotation 구분하기!!
+    * @RequestParam: url path에 추가된 쿼리스트링 받기
+    * @RequestBody: html body로 JSON 받아오기
+    * @VariablePath: url path로 받기
+    -----------------------------------------*/
 
     // 일정 등록
     // 반환: Dto
@@ -49,6 +50,7 @@ public class ScheduleController {
 
 
     // 일정 조회
+    // 반환: Dto
     @GetMapping("/{id}")
     public ScheduleResponseDto getSchedule(@PathVariable int id) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
@@ -64,6 +66,7 @@ public class ScheduleController {
     }
 
     // 일정 전체 조회
+    // 반환: Dto 리스트
     @GetMapping
     public List<ScheduleResponseDto> getSchedules() {
         // Map To List
@@ -72,6 +75,7 @@ public class ScheduleController {
     }
 
     // 일정 수정
+    // 반환: Dto
     @PutMapping
     public ScheduleResponseDto updateSchedule(@RequestBody ScheduleRequestDto requestDto) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
@@ -99,8 +103,26 @@ public class ScheduleController {
     }
 
     // 일정 삭제
+    // 반환: id
     @DeleteMapping
-    public void deleteSchedule() {
+    public int deleteSchedule(@RequestBody ScheduleRequestDto requestDto) {
+        // Schedule 리스트에서 해당 일정이 존재하는지 확인
+        int id = requestDto.getId();
+        if (!scheduleList.containsKey(id)) {
+            throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
+            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+        }
 
+        // 해당 일정 가져오기
+        Schedule schedule = scheduleList.get(id);
+        // 암호가 일치하지 않는지 확인
+        if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
+            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
+            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+        }
+
+        // 삭제
+        scheduleList.remove(id);
+        return id;
     }
 }
