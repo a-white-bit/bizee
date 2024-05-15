@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,6 +17,7 @@ public class Schedule {
     private String creationDate;
 
     public Schedule(ScheduleRequestDto requestDto) {
+        this.id = requestDto.getId();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.responsibility = requestDto.getResponsibility();

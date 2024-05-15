@@ -14,12 +14,14 @@ import java.util.Map;
 @RequestMapping("/schedule")
 public class ScheduleController {
 
-    // DB 대신 저장소 사용
-    private final Map<Long, Schedule> scheduleList = new HashMap<>();
+    // Schedule 인스턴스 저장소
+    private final Map<Integer, Schedule> scheduleList = new HashMap<>();
 
-    // Request Param
+
+    // @RequestParam: url path에 추가된 쿼리스트링 받기
     // @RequestBody: html body로 JSON 받아오기
-    // @VariablePath:
+    // @VariablePath: url path로 받기
+
 
     // 일정 등록
     // 반환: Dto
@@ -29,7 +31,14 @@ public class ScheduleController {
         // RequestDto 객체를 Entity로 mapping
         Schedule schedule = new Schedule(requestDto);
 
-        // Entity(Memo) --> ResponseDto로 전달
+        // schedule Map의 Max ID 확인
+        int maxId = !scheduleList.isEmpty() ? Collections.max(scheduleList.keySet()) + 1 : 1;
+        schedule.setId(maxId);
+
+        // Map에 저장
+        scheduleList.put(maxId, schedule);
+
+        // ResponseDto로 전달
         return new ScheduleResponseDto(schedule);
     }
 
