@@ -5,6 +5,7 @@ import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,14 @@ public class ScheduleController {
         } else {
             throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
         }
+    }
+
+    // 일정 전체 조회
+    @GetMapping
+    public List<ScheduleResponseDto> getSchedules() {
+        // Map To List
+        return scheduleList.values().stream()
+                .map(ScheduleResponseDto::new).toList();
     }
 
     // 일정 수정
