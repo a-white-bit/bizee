@@ -66,10 +66,10 @@
 
 |    기능     | Method |      URL       |                                       request                                        |                                                   response                                                   |
 |:---------:|:------:|:--------------:|:------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
-|   일정 등록   |  POST  |   /schedule    | { 'title':제목, 'content':내용, 'responsibility':담당자, 'passkey':암호, 'creationData':작성일 } |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
-|   일정 조회   |  GET   | /schedule/{id} |                                           등록번호                                       |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
-| 일정 전체 조회  |  GET   |   /schedule    |                                                                                      | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }, ..] } |
-|   일정 수정   |  PUT   |   /schedule    |      { 'id':등록번호, title':제목, 'content':내용, 'responsibility':담당자, 'passkey':암호 }      |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationData':작성일 }               |
+|   일정 등록   |  POST  |   /schedule    | { 'title':제목, 'content':내용, 'responsibility':담당자, 'passkey':암호, 'creationDate':작성일 } |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+|   일정 조회   |  GET   | /schedule/{id} |                                         등록번호                                         |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+| 일정 전체 조회  |  GET   |   /schedule    |                                                                                      | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }, ..] } |
+|   일정 수정   |  PUT   |   /schedule    |      { 'id':등록번호, title':제목, 'content':내용, 'responsibility':담당자, 'passkey':암호 }      |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
 |   일정 삭제   | DELETE |   /schedule    |                             { 'id':등록번호, 'passkey':암호 }                              |                                                { 'id':등록번호 }                                                 |
 
 
