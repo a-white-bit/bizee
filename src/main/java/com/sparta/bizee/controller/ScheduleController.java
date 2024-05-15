@@ -5,11 +5,11 @@ import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController // 각 메서드마다 @ResponseBody 한 것과 같음
 @RequestMapping("/schedule")
@@ -36,6 +36,10 @@ public class ScheduleController {
         int maxId = !scheduleList.isEmpty() ? Collections.max(scheduleList.keySet()) + 1 : 1;
         schedule.setId(maxId);
 
+        //
+        // 예외처리: passkey가 null로 등록하려고 하면 --> 취소
+        //
+
         // Map에 저장
         scheduleList.put(maxId, schedule);
 
@@ -49,12 +53,13 @@ public class ScheduleController {
     public ScheduleResponseDto getSchedule(@PathVariable int id) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
         if (scheduleList.containsKey(id)) {
-            // 해당 메모 가져오기
+            // 해당 일정 가져오기
             Schedule schedule = scheduleList.get(id);
             // ResponseDto로 전달
             return new ScheduleResponseDto(schedule);
         } else {
             throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
+            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
         }
     }
 
@@ -68,8 +73,29 @@ public class ScheduleController {
 
     // 일정 수정
     @PutMapping
-    public void updateSchedule() {
+    public ScheduleResponseDto updateSchedule(@RequestBody ScheduleRequestDto requestDto) {
+        // Schedule 리스트에서 해당 일정이 존재하는지 확인
+        int id = requestDto.getId();
+        if (!scheduleList.containsKey(id)) {
+            throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
+            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+        }
 
+        // 해당 일정 가져오기
+        Schedule schedule = scheduleList.get(id);
+        // 암호가 일치하지 않는지 확인
+        if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
+            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
+            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+        }
+
+        // 수정
+        schedule.setTitle(requestDto.getTitle());
+        schedule.setContent(requestDto.getContent());
+        schedule.setResponsibility(requestDto.getResponsibility());
+
+        // ResponseDto로 전달
+        return new ScheduleResponseDto(schedule);
     }
 
     // 일정 삭제
