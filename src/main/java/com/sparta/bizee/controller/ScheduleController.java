@@ -44,9 +44,17 @@ public class ScheduleController {
 
 
     // 일정 조회
-    @GetMapping
-    public void getSchedule() {
-
+    @GetMapping("/{id}")
+    public ScheduleResponseDto getSchedule(@PathVariable int id) {
+        // Schedule 리스트에서 해당 일정이 존재하는지 확인
+        if (scheduleList.containsKey(id)) {
+            // 해당 메모 가져오기
+            Schedule schedule = scheduleList.get(id);
+            // ResponseDto로 전달
+            return new ScheduleResponseDto(schedule);
+        } else {
+            throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
+        }
     }
 
     // 일정 수정
