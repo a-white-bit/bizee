@@ -3,7 +3,14 @@ package com.sparta.bizee.controller;
 import com.sparta.bizee.dto.ScheduleRequestDto;
 import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,8 +71,7 @@ public class ScheduleController {
             // ResponseDto로 전달
             return new ScheduleResponseDto(schedule);
         } else {
-            throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
-            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+            throw new IllegalArgumentException("해당 일정이 삭제되었거나 찾을 수 없습니다.");
         }
     }
 
@@ -73,6 +79,10 @@ public class ScheduleController {
     // 반환: Dto 리스트
     @GetMapping
     public List<ScheduleResponseDto> getSchedules() {
+        // 비어있는 일정 리스트인지 확인
+        if (scheduleList.isEmpty()) {
+            throw new IllegalArgumentException("아무 일정도 없습니다.");
+        }
         // Map To List
         return scheduleList.values().stream()
                 .map(ScheduleResponseDto::new).toList();
@@ -85,8 +95,7 @@ public class ScheduleController {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
         int id = requestDto.getId();
         if (!scheduleList.containsKey(id)) {
-            throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
-            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+            throw new IllegalArgumentException("해당 일정이 삭제되었거나 찾을 수 없습니다.");
         }
 
         // 해당 일정 가져오기
@@ -94,7 +103,6 @@ public class ScheduleController {
         // 암호가 일치하지 않는지 확인
         if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
             throw new IllegalArgumentException("암호가 일치하지 않습니다.");
-            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
         }
 
         // 수정
@@ -113,8 +121,7 @@ public class ScheduleController {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
         int id = requestDto.getId();
         if (!scheduleList.containsKey(id)) {
-            throw new IllegalArgumentException("해당 일정이 존재하지 않습니다.");
-            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
+            throw new IllegalArgumentException("해당 일정이 삭제되었거나 찾을 수 없습니다.");
         }
 
         // 해당 일정 가져오기
@@ -122,7 +129,6 @@ public class ScheduleController {
         // 암호가 일치하지 않는지 확인
         if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
             throw new IllegalArgumentException("암호가 일치하지 않습니다.");
-            // 예외 throw 대신 클라이언트에게 책임 묻기 (서버는 문제 없는디?)
         }
 
         // 삭제
