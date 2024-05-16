@@ -3,6 +3,9 @@ package com.sparta.bizee.controller;
 import com.sparta.bizee.dto.ScheduleRequestDto;
 import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Validated // @PathVariable 유효성 검사 위함
 @RestController // 각 메서드마다 @ResponseBody 한 것과 같음
 @RequestMapping("/schedule")
 public class ScheduleController {
@@ -40,17 +44,13 @@ public class ScheduleController {
     // 반환: Dto
     //@ResponseBody : HTTP 응답데이터(body)에 자바 객체가 매핑되어 전달
     @PostMapping
-    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         // RequestDto 객체를 Entity로 mapping
         Schedule schedule = new Schedule(requestDto);
 
         // schedule Map의 Max ID 확인
         int maxId = !scheduleList.isEmpty() ? Collections.max(scheduleList.keySet()) + 1 : 1;
         schedule.setId(maxId);
-
-        //
-        // 예외처리: passkey가 null로 등록하려고 하면 --> 취소
-        //
 
         // Map에 저장
         scheduleList.put(maxId, schedule);
@@ -63,7 +63,7 @@ public class ScheduleController {
     // 일정 조회
     // 반환: Dto
     @GetMapping("/{id}")
-    public ScheduleResponseDto getSchedule(@PathVariable int id) {
+    public ScheduleResponseDto getSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable int id) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
         if (scheduleList.containsKey(id)) {
             // 해당 일정 가져오기
@@ -91,7 +91,7 @@ public class ScheduleController {
     // 일정 수정
     // 반환: Dto
     @PutMapping
-    public ScheduleResponseDto updateSchedule(@RequestBody ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
         int id = requestDto.getId();
         if (!scheduleList.containsKey(id)) {
@@ -116,8 +116,9 @@ public class ScheduleController {
 
     // 일정 삭제
     // 반환: id
+
     @DeleteMapping
-    public int deleteSchedule(@RequestBody ScheduleRequestDto requestDto) {
+    public int deleteSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인
         int id = requestDto.getId();
         if (!scheduleList.containsKey(id)) {

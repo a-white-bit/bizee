@@ -1,5 +1,8 @@
 package com.sparta.bizee.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,9 +19,17 @@ import lombok.NoArgsConstructor;
  */
 public class ScheduleRequestDto {
     private int id;
+
+    @NotBlank(message = "제목은 필수 입력사항입니다.")
+    @Size(max = 200, message = "제목은 200자 이내로 작성해야합니다.")
     private String title;
+
     private String content;
+
+    @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String responsibility;
+
+    @NotBlank(message = "암호는 필수 입력사항입니다.")
     private String passKey;
     private String creationDate;
 
