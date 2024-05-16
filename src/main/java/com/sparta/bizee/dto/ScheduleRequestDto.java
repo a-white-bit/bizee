@@ -5,6 +5,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+/*
+ * -----------(학습용 메모)----------
+ * JSON --> Object로 변환  : 역직렬화
+ * Jackson 라이브러리가 해줌
+ * 바이트코드(JSON 파일)로 객체를 생성해야 하는데,  리플렉션 기술을 사용함
+ * 리플렉션으로 객체를 생성하려면 기본 생성자가 필수임
+ * 결론: @NoArgsConstructor 꼭 필요함
+ * -------------------------------
+ */
 public class ScheduleRequestDto {
     private int id;
     private String title;

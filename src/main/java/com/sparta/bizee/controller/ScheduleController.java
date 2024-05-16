@@ -23,6 +23,10 @@ public class ScheduleController {
     * @RequestParam: url path에 추가된 쿼리스트링 받기
     * @RequestBody: html body로 JSON 받아오기
     * @VariablePath: url path로 받기
+    *
+    * (추가)
+    * 만약 매개변수 추론불가 오류 발생시
+    * @PathVariable("id") 혹은 @RequestParam("id") 처럼 이름을 직접 명시하기
     -----------------------------------------*/
 
     // 일정 등록
