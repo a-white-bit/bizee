@@ -10,7 +10,7 @@
 > ### 프로젝트 설명
 > 웹에서 일정을 등록하고, 조회, 수정, 삭제를 할 수 있습니다.
 >
-> 현재는 http 요청에 대한 API 기능만 동작하며, 테스트 시에는 [postman](https://web.postman.co/)같은 도구를 사용합니다.
+> 현재는 http 요청에 대한 API 기능만 동작하며, 테스트 시에는 [postman](https://web.postman.co/)같은 도구를 사용합니다. (+추가: Swagger)
 > 
 > 현재 프로젝트에 데이터베이스는 사용되지 않습니다. (서버 종료시 일정 기록이 사라집니다.)
 > 
@@ -173,6 +173,10 @@
     - @PathVariable 같은 단일 값은 @Valid를 사용하지 않고 바로 @NotBlank 등 유효성 검사, 클래스에 @Validated 추가
     - 검증에 실패 : throw MethodArgumentNotValidException --> 예외 핸들링 구현
 
+### 9. Swagger
+    - 의존성 추가 {implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'}
+    - Swagger UI를 확인: http://localhost:8080/swagger-ui/index.html 로 접속
+
 </details>
 
 <br>
@@ -189,5 +193,6 @@
 5. 추가 구현 기능 문서 작성
 6. 예외 발생 처리 구현
 7. 유효성 검사 (@Valid) 구현
+8. Swagger 구현
 
 <br>
