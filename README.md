@@ -99,14 +99,14 @@
 ## API 명세
 
 
-|    기능     | Method |      URL       |                                               request                                                |                                                   response                                                   |
-|:---------:|:------:|:--------------:|:----------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
-|   일정 등록   |  POST  |   /schedule    |    { "title":"제목", "content":"내용", "responsibility":"담당자", "passKey":"암호", "creationDate":"작성일" }    |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
-|   일정 조회   |  GET   | /schedule/{id} |                                                 등록번호                                                 |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
-| 일정 전체 조회  |  GET   |   /schedule    |                                                                                                      | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }, ..] } |
-|   일정 수정   |  PUT   |   /schedule    |         { "id":등록번호, "title":"제목", "content":"내용", "responsibility":"담당자", "passKey":"암호" }          |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
-|   일정 삭제   | DELETE |   /schedule    |                                    { "id":등록번호, "passKey":"암호" }                                     |                                                { 'id':등록번호 }                                                 |
-
+|    기능     | Method |      URL       |                                                request                                                 |                                                   response                                                   |
+|:---------:|:------:|:--------------:|:------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
+|   일정 등록   |  POST  |   /schedule    | JSON :: { "title":"제목", "content":"내용", "responsibility":"담당자", "passKey":"암호", "creationDate":"작성일" } |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+|   일정 조회   |  GET   | /schedule/{id} |                                       URL path variable :: 등록번호                                        |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+| 일정 전체 조회  |  GET   |   /schedule    |                                                                                                        | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }, ..] } |
+|   일정 수정   |  PUT   |   /schedule    |      JSON :: { "id":등록번호, "title":"제목", "content":"내용", "responsibility":"담당자", "passKey":"암호" }       |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+|   일정 삭제   | DELETE |   /schedule    |                                JSON ::   { "id":등록번호, "passKey":"암호" }                                 |                                                { 'id':등록번호 }                                                 |
+ | 이미지 업로드 |  POST  |    /upload     |                       form-data 형식 ::  key: image / value: JPG, PNG, JPEG 이미지파일                        |                                              String :: filename                                              |
 
 
 <br>
@@ -177,6 +177,10 @@
     - 의존성 추가 {implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'}
     - Swagger UI를 확인: http://localhost:8080/swagger-ui/index.html 로 접속
 
+### 10. 파일 업로드 기능 & 서버 로컬 PC에 다운로드
+    - application.properties에 업로드할 폴더 위치 설정
+    - FileController 구현
+
 </details>
 
 <br>
@@ -194,5 +198,6 @@
 6. 예외 발생 처리 구현
 7. 유효성 검사 (@Valid) 구현
 8. Swagger 구현
+9. 클라이언트 파일을 서버에 업로드 구현
 
 <br>
