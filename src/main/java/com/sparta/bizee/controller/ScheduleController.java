@@ -30,7 +30,7 @@ public class ScheduleController {
     private final Map<Integer, Schedule> scheduleList = new HashMap<>();
 
     /* -------------(학습용 메모)---------------
-    * Controller Parameter Annotation 구분하기!!
+    * Controller Mapping Parameter annotation 구분하기!!
     * @RequestParam: url path에 추가된 쿼리스트링 받기
     * @RequestBody: html body로 JSON 받아오기
     * @VariablePath: url path로 받기
@@ -116,7 +116,6 @@ public class ScheduleController {
 
     // 일정 삭제
     // 반환: id
-
     @DeleteMapping
     public int deleteSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         // Schedule 리스트에서 해당 일정이 존재하는지 확인

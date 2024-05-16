@@ -36,4 +36,11 @@ public class ExceptionController {
         return new ErrorResponseDto(HttpStatus.BAD_REQUEST.toString(), e.getMessage());
     }
 
+    // 잘못된 File type Request
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidFileTypeException.class)
+    @ResponseBody
+    public ErrorResponseDto invalidFileTypeRequestHandler(InvalidFileTypeException e) {
+        return new ErrorResponseDto(HttpStatus.BAD_REQUEST.toString(), e.getMessage());
+    }
 }
