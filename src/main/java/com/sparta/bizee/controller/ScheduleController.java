@@ -24,8 +24,8 @@ public class ScheduleController {
 
     // Memo Control <-> Service 분리
     ScheduleService scheduleService;
-    public ScheduleController() {
-        scheduleService = new ScheduleService();
+    public ScheduleController(ScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
     }
 
     /* -------------(학습용 메모)---------------
