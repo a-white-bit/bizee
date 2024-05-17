@@ -3,13 +3,15 @@ package com.sparta.bizee.dto;
 import com.sparta.bizee.entity.Schedule;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class ScheduleResponseDto {
-    private int id;
-    private String title;
-    private String content;
-    private String responsibility;
-    private String creationDate;
+    private final int id;
+    private final String title;
+    private final String content;
+    private final String responsibility;
+    private final LocalDateTime creationDate;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();

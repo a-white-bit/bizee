@@ -20,11 +20,16 @@ import java.util.Objects;
 @Controller
 public class FileController {
 
+    // 서버 로컬 PC에 저장될 폴더 위치(경로)
     // **application.properties 에 file.upload-dir=upload 설정하기
     // 설정이 없을 때 (전역)user 폴더 위치에 생성 (전혀 다른 곳!)
     @Value("${file.upload-dir:${user.home}}")
     private String uploadDir;
 
+    /*
+    ** 이 POST method는 form-data 형식을 받습니다. (html의 form 태그 형식)
+    ** key: "image", value: JPG, JPEG, PNG 이미지 파일
+    */
     @ResponseBody
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("image") MultipartFile file) throws InvalidFileTypeException, IOException {
