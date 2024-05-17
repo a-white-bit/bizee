@@ -5,6 +5,7 @@ import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -48,12 +49,14 @@ public class ScheduleService {
         if (scheduleList.isEmpty()) {
             throw new IllegalArgumentException("아무 일정도 없습니다.");
         }
+
+        List<Schedule> mapToList = new ArrayList<>(scheduleList.values());
+
         // 날짜 내림차순 정렬
+        Collections.sort(mapToList);
 
-
-        // Map To List
-        return scheduleList.values().stream()
-                .map(ScheduleResponseDto::new).toList();
+        // List<Schedule> -> List<ScheduleResponseDto> 변환
+        return mapToList.stream().map(ScheduleResponseDto::new).toList();
     }
 
     public ScheduleResponseDto updateSchedule(ScheduleRequestDto requestDto) {
