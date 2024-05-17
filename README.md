@@ -12,7 +12,7 @@
 >
 > http 요청에 대한 API 기능만 동작하며, 테스트 시에는 [postman](https://web.postman.co/)같은 도구를 사용합니다. (+추가: Swagger)
 > 
-> 현재 프로젝트에 3-Layer Architecture의 repository-데이터베이스가 구현되어있지 않습니다.
+> 현재 프로젝트에 데이터베이스가 구현되어있지 않습니다.
 > 
 > 본 프로젝트는 내일배움캠프 과제로 사용되었습니다.
 > 
