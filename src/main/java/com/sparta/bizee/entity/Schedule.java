@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +17,7 @@ public class Schedule {
     private String content;
     private String responsibility;
     private String passKey;
-    private String creationDate;
+    private LocalDateTime creationDate;
 
     public Schedule(ScheduleRequestDto requestDto) {
         this.id = requestDto.getId();
@@ -22,6 +25,6 @@ public class Schedule {
         this.content = requestDto.getContent();
         this.responsibility = requestDto.getResponsibility();
         this.passKey = requestDto.getPassKey();
-        this.creationDate = requestDto.getCreationDate();
+        this.creationDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }

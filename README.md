@@ -99,14 +99,14 @@
 ## API 명세
 
 
-|    기능     | Method |      URL       |                                                request                                                 |                                                   response                                                   |
-|:---------:|:------:|:--------------:|:------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
-|   일정 등록   |  POST  |   /schedule    | JSON :: { "title":"제목", "content":"내용", "responsibility":"담당자", "passKey":"암호", "creationDate":"작성일" } |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
-|   일정 조회   |  GET   | /schedule/{id} |                                       URL path variable :: 등록번호                                        |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
-| 일정 전체 조회  |  GET   |   /schedule    |                                                                                                        | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }, ..] } |
-|   일정 수정   |  PUT   |   /schedule    |      JSON :: { "id":등록번호, "title":"제목", "content":"내용", "responsibility":"담당자", "passKey":"암호" }       |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
-|   일정 삭제   | DELETE |   /schedule    |                                JSON ::   { "id":등록번호, "passKey":"암호" }                                 |                                                { 'id':등록번호 }                                                 |
- | 이미지 업로드 |  POST  |    /upload     |                       form-data 형식 ::  key: image / value: JPG, PNG, JPEG 이미지파일                        |                                              String :: filename                                              |
+|    기능     | Method |      URL       |                                              request                                              |                                                   response                                                   |
+|:---------:|:------:|:--------------:|:-------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------:|
+|   일정 등록   |  POST  |   /schedule    |      JSON :: { "title":"제목", "content":"내용", "responsibility":"담당자@email", "passKey":"암호" }       |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+|   일정 조회   |  GET   | /schedule/{id} |                                     URL path variable :: 등록번호                                     |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+| 일정 전체 조회  |  GET   |   /schedule    |                                                                                                   | { 'scheduleList' : [{ 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }, ..] } |
+|   일정 수정   |  PUT   |   /schedule    | JSON :: { "id":등록번호, "title":"제목", "content":"내용", "responsibility":"담당자@email", "passKey":"암호" } |              { 'id':등록번호, 'title':제목, 'content':내용, 'responsibility':담당자, 'creationDate':작성일 }               |
+|   일정 삭제   | DELETE |   /schedule    |                              JSON ::   { "id":등록번호, "passKey":"암호" }                              |                                                { 'id':등록번호 }                                                 |
+| 이미지 업로드 |  POST  |    /upload     |                     form-data 형식 ::  key: image / value: JPG, PNG, JPEG 이미지파일                     |                                              String :: filename                                              |
 
 
 <br>
@@ -114,6 +114,8 @@
 ## Entity-Relation Diagram
 
 <img src="src/main/resources/images/erd.png" alt="ER">
+
+     - 변경사항: -creationDate 타입 변경 (String --> LocalDateTime)
 
 <br>
 
