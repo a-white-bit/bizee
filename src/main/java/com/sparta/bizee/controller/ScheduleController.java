@@ -1,5 +1,6 @@
 package com.sparta.bizee.controller;
 
+import com.sparta.bizee.dto.ScheduleDeleteRequestDto;
 import com.sparta.bizee.dto.ScheduleRequestDto;
 import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.service.ScheduleService;
@@ -42,7 +43,7 @@ public class ScheduleController {
     // 일정 등록
     // 반환: Dto
     //@ResponseBody : HTTP 응답데이터(body)에 자바 객체가 매핑되어 전달
-    @PostMapping
+    @PostMapping("/post")
     public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         return scheduleService.createSchedule(requestDto);
     }
@@ -63,15 +64,15 @@ public class ScheduleController {
 
     // 일정 수정
     // 반환: Dto
-    @PutMapping
-    public ScheduleResponseDto updateSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
-        return scheduleService.updateSchedule(requestDto);
+    @PutMapping("/update/{id}")
+    public ScheduleResponseDto updateSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable int id, @Valid @RequestBody ScheduleRequestDto requestDto) {
+        return scheduleService.updateSchedule(id, requestDto);
     }
 
     // 일정 삭제
     // 반환: id
-    @DeleteMapping
-    public int deleteSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
-        return scheduleService.deleteSchedule(requestDto);
+    @DeleteMapping("/delete/{id}")
+    public int deleteSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable int id, @Valid @RequestBody ScheduleDeleteRequestDto requestDto) {
+        return scheduleService.deleteSchedule(id, requestDto);
     }
 }

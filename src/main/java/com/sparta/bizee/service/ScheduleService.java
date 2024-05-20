@@ -1,6 +1,7 @@
 package com.sparta.bizee.service;
 
 import com.sparta.bizee.Repository.ScheduleRepository;
+import com.sparta.bizee.dto.ScheduleDeleteRequestDto;
 import com.sparta.bizee.dto.ScheduleRequestDto;
 import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
@@ -50,14 +51,12 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(int id, ScheduleRequestDto requestDto) {
         // 해당 일정이 DB에 존재하는지 확인
-        Schedule schedule = findSchedule(requestDto.getId());
+        Schedule schedule = findSchedule(id);
 
         // 암호 확인
-        if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
-            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
-        }
+        isCorrectKey(schedule.getPassKey(), requestDto.getPassKey());
 
         // 직접 엔티티 setter로 수정
         schedule.update(requestDto);
@@ -66,14 +65,12 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
-    public int deleteSchedule(ScheduleRequestDto requestDto) {
+    public int deleteSchedule(int id, ScheduleDeleteRequestDto requestDto) {
         // 해당 일정이 DB에 존재하는지 확인
-        Schedule schedule = findSchedule(requestDto.getId());
+        Schedule schedule = findSchedule(id);
 
         // 암호 확인
-        if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
-            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
-        }
+        isCorrectKey(schedule.getPassKey(), requestDto.getPassKey());
 
         // 제거
         scheduleRepository.delete(schedule);
@@ -85,5 +82,12 @@ public class ScheduleService {
     private Schedule findSchedule(int id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일정이 삭제되었거나 찾을 수 없습니다."));
+    }
+
+    private void isCorrectKey(String key, String requestKey) {
+        // 암호 확인
+        if (!Objects.equals(key, requestKey)) {
+            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
+        }
     }
 }

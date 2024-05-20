@@ -2,11 +2,10 @@ package com.sparta.bizee.controller;
 
 import com.sparta.bizee.exception.InvalidFileTypeException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,7 +16,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-@Controller
+@RestController
 public class FileController {
 
     // 서버 로컬 PC에 저장될 폴더 위치(경로)
@@ -30,7 +29,6 @@ public class FileController {
     ** 이 POST method는 form-data 형식을 받습니다. (html의 form 태그 형식)
     ** key: "image", value: JPG, JPEG, PNG 이미지 파일
     */
-    @ResponseBody
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("image") MultipartFile file) throws InvalidFileTypeException, IOException {
 
@@ -57,5 +55,4 @@ public class FileController {
         }
         return "서버에 저장된 파일: " + file.getOriginalFilename();
     }
-
 }
