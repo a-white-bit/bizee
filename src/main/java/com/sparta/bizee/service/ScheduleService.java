@@ -5,8 +5,10 @@ import com.sparta.bizee.dto.ScheduleRequestDto;
 import com.sparta.bizee.dto.ScheduleResponseDto;
 import com.sparta.bizee.entity.Schedule;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ScheduleService {
@@ -28,7 +30,7 @@ public class ScheduleService {
 
     public ScheduleResponseDto getSchedule(int id) {
         // ID로 일정 찾기
-        Schedule result = scheduleRepository.findById(id);
+        Schedule result = findSchedule(id);
 
         // ResponseDto로 전달
         return new ScheduleResponseDto(result);
@@ -36,27 +38,52 @@ public class ScheduleService {
 
     public List<ScheduleResponseDto> getSchedules() {
         // 전체 일정 조회
-        List<Schedule> result = scheduleRepository.findAll();
+        List<Schedule> result = scheduleRepository.findAllByOrderByCreationDateDesc();
 
-        // List<Schedule> -> List<ScheduleResponseDto> 변환
-        return result.stream().map(ScheduleResponseDto::new).toList();
+        // 비어있는 일정 리스트인지 확인
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("아무 일정도 없습니다.");
+        } else {
+            // List<Schedule> -> List<ScheduleResponseDto> 변환
+            return result.stream().map(ScheduleResponseDto::new).toList();
+        }
     }
 
+    @Transactional
     public ScheduleResponseDto updateSchedule(ScheduleRequestDto requestDto) {
-        // 변경 요청 데이터를 갖는 일정 인스턴스 생성
-        Schedule request = new Schedule(requestDto);
-        Schedule changedSchedule = scheduleRepository.update(request);
+        // 해당 일정이 DB에 존재하는지 확인
+        Schedule schedule = findSchedule(requestDto.getId());
+
+        // 암호 확인
+        if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
+            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
+        }
+
+        // 직접 엔티티 setter로 수정
+        schedule.update(requestDto);
 
         // ResponseDto로 전달
-        return new ScheduleResponseDto(changedSchedule);
+        return new ScheduleResponseDto(schedule);
     }
 
     public int deleteSchedule(ScheduleRequestDto requestDto) {
-        // 변경 요청 데이터를 갖는 일정 인스턴스 생성
-        Schedule request = new Schedule(requestDto);
-        int id = scheduleRepository.delete(request);
+        // 해당 일정이 DB에 존재하는지 확인
+        Schedule schedule = findSchedule(requestDto.getId());
+
+        // 암호 확인
+        if (!Objects.equals(schedule.getPassKey(), requestDto.getPassKey())) {
+            throw new IllegalArgumentException("암호가 일치하지 않습니다.");
+        }
+
+        // 제거
+        scheduleRepository.delete(schedule);
 
         // 제거된 ID 전달
-        return id;
+        return schedule.getId();
+    }
+
+    private Schedule findSchedule(int id) {
+        return scheduleRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 일정이 삭제되었거나 찾을 수 없습니다."));
     }
 }
