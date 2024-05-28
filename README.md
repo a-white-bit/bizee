@@ -1,4 +1,4 @@
-# 🥣 _Bizee_ : 일정 관리 앱 서버
+# 🥣 _Bizee_ : 일정 관리 앱 서버 (Ver.2)
 
 ## 개요
 
@@ -9,12 +9,17 @@
 
 > ### 프로젝트 설명
 > 웹에서 일정을 등록하고, 조회, 수정, 삭제를 할 수 있습니다.
+> 
+> 회원가입을 하면 로그인을 통하여 각 일정에 대해 댓글을 등록, 수정, 삭제할 수 있습니다.
 >
 > http 요청에 대한 API 기능만 동작하며, 테스트 시에는 [postman](https://web.postman.co/)같은 도구를 사용합니다. (+추가: Swagger)
 > 
 > 본 프로젝트는 내일배움캠프 과제로 사용되었습니다.
 > 
 ## 요구사항
+
+<details>
+<summary>ver.1</summary>
 
 > ### 기능 요구사항
 > 0. 공통 조건
@@ -85,6 +90,44 @@
 > 
 > 3. Entity를 그대로 반환하지 않습니다. (DTO를 사용)
 
+</details>
+
+<details>
+<summary>ver.2</summary>
+
+> ### 기능 요구사항
+> 1. 댓글 등록
+>   - 선택한 일정이 있다면 댓글을 등록합니다.
+>   - 등록 성공시 댓글을 반환합니다.
+>   - 댓글 고유번호, 댓글 내용, 작성자 ID, 일정 ID, 작성일자를 저장합니다.
+>
+> 
+> 2. 댓글 수정
+>   - 선택한 일정의 댓글을 수정합니다.
+>   - 수정된 댓글을 반환합니다.
+>   - 댓글 내용만 수정가능합니다.
+>   - 일치하는 사용자만 수정할 수 있습니다.
+> 
+> 
+> 3. 댓글 삭제
+>   - 선택한 일정의 댓글을 삭제합니다.
+>   - '성공했다'는 메시지와 상태 코드를 반환합니다.
+>   - 일치하는 사용자만 삭제할 수 있습니다.
+> 
+> 
+> 4. 인증/인가 처리
+>   - 1~3 요구사항을 JWT를 사용하여 인증/인가 처리 후 동작하도록 합니다.
+> 
+> 
+> 5. 회원가입
+>   - 사용자의 정보를 전달받아 유저 정보를 저장합니다.
+> 
+> 
+> 6. 로그인
+>   - 유저가 입력한 아이디와 비밀번호를 받아 토큰을 반환합니다.
+>
+
+</details>
 <br>
 
 ## Use Case Diagram
@@ -95,22 +138,19 @@
 
 ## API 명세
 
-![img.png](img.png)
+<img src="src/main/resources/images/api.png" alt="api">
 
 <br>
 
 ## Entity-Relation Diagram
 
-<img src="src/main/resources/images/erd.png" alt="ER">
-
-     - 변경사항: -creationDate 타입 변경 (String --> LocalDateTime)
+<img src="src/main/resources/images/erd_v2.png" alt="erd">
 
 <br>
 
 ## 구현해야 할 기능
 <details>
-<summary>자세히</summary>
-
+<summary>Ver.1</summary>
 
 ### 1. Model Entity, DTO 구현
     - 작성한 ERD를 참고하여 Entity 구현
@@ -173,9 +213,29 @@
 
 </details>
 
+<details>
+<summary>ver.2</summary>
+
+### 1. 댓글 엔터티 구현, 관계 설정
+    - 각 일정에 댓글을 작성할 수 있는 Comment Entity 생성
+    - 엔터티 간의 연관관계 설정  일정(1:N)댓글
+
+### 2. 댓글 등록 기능
+    - Controller, Service 구현
+
+### 3. 댓글 수정 기능
+    - Controller, Service 구현
+
+### 4. 댓글 삭제 기능
+    - Controller, Service 구현
+
+</details>
 <br>
 
 ## 프로젝트 진행 계획
+
+<details>
+<summary>ver.1</summary>
 
 1. 어떤 프로젝트인지와 구현해야 할 기능을 대략적으로 작성
     - 과제에 진행에 필요한 내용들을 [README.md](./README.md)에서 모두 볼 수 있도록 작성
@@ -194,5 +254,12 @@
 12. 리팩토링 :: DB 추가, 단순 이미지 업로드 기능을 일정 관리 사이드에 유저 이미지 등록 기능으로 변경
 13. 구조에 맞게 ERD, UseCase 수정
 14. API 명세서 외부 툴 사용 이미지로 교체
+</details>
 
+<details>
+<summary>ver.2</summary>
+
+1. 댓글 Entity 추가, 관계 설정, ERD 수정
+
+</details>
 <br>
