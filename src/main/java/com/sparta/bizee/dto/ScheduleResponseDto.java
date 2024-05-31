@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ScheduleResponseDto {
-    private final int id;
+    private final long id;
     private final String title;
     private final String content;
     private final String responsibility;

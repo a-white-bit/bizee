@@ -29,7 +29,7 @@ public class ScheduleService {
         return new ScheduleResponseDto(result);
     }
 
-    public ScheduleResponseDto getSchedule(int id) {
+    public ScheduleResponseDto getSchedule(long id) {
         // ID로 일정 찾기
         Schedule result = findSchedule(id);
 
@@ -51,7 +51,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(int id, ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(long id, ScheduleRequestDto requestDto) {
         // 해당 일정이 DB에 존재하는지 확인
         Schedule schedule = findSchedule(id);
 
@@ -65,7 +65,7 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
-    public int deleteSchedule(int id, ScheduleDeleteRequestDto requestDto) {
+    public long deleteSchedule(long id, ScheduleDeleteRequestDto requestDto) {
         // 해당 일정이 DB에 존재하는지 확인
         Schedule schedule = findSchedule(id);
 
@@ -79,7 +79,7 @@ public class ScheduleService {
         return schedule.getId();
     }
 
-    private Schedule findSchedule(int id) {
+    private Schedule findSchedule(long id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일정이 삭제되었거나 찾을 수 없습니다."));
     }

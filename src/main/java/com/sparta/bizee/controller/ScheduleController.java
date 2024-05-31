@@ -51,7 +51,7 @@ public class ScheduleController {
     // 일정 조회
     // 반환: Dto
     @GetMapping("/{id}")
-    public ScheduleResponseDto getSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable int id) {
+    public ScheduleResponseDto getSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable long id) {
         return scheduleService.getSchedule(id);
     }
 
@@ -65,14 +65,14 @@ public class ScheduleController {
     // 일정 수정
     // 반환: Dto
     @PutMapping("/update/{id}")
-    public ScheduleResponseDto updateSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable int id, @Valid @RequestBody ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
         return scheduleService.updateSchedule(id, requestDto);
     }
 
     // 일정 삭제
     // 반환: id
     @DeleteMapping("/delete/{id}")
-    public int deleteSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable int id, @Valid @RequestBody ScheduleDeleteRequestDto requestDto) {
+    public long deleteSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable long id, @Valid @RequestBody ScheduleDeleteRequestDto requestDto) {
         return scheduleService.deleteSchedule(id, requestDto);
     }
 }
