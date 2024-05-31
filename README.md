@@ -139,6 +139,7 @@
 ## API 명세
 
 <img src="src/main/resources/images/api.png" alt="api">
+<img src="src/main/resources/images/api_comment.JPG" alt="api_comment">
 
 <br>
 
