@@ -261,6 +261,9 @@
 <summary>ver.2</summary>
 
 1. 댓글 Entity 추가, 관계 설정, ERD 수정
+2. 댓글 등록 기능 구현
+3. 댓글 수정 기능 구현
+4. 댓글 삭제 기능 구현
 
 </details>
 <br>
