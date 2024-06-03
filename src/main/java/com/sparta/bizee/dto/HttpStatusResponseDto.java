@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter // 추가
 @RequiredArgsConstructor
-public class ErrorResponseDto {
+public class HttpStatusResponseDto {
     private final String code;
     private final String message;
 }
