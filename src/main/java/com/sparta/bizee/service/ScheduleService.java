@@ -39,7 +39,7 @@ public class ScheduleService {
 
     public List<ScheduleResponseDto> getSchedules() {
         // 전체 일정 조회
-        List<Schedule> result = scheduleRepository.findAllByOrderByCreationDateDesc();
+        List<Schedule> result = scheduleRepository.findAllByOrderByCreatedAtDesc();
 
         // 비어있는 일정 리스트인지 확인
         if (result.isEmpty()) {

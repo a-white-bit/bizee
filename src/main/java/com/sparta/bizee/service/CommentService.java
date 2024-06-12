@@ -24,14 +24,14 @@ public class CommentService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public CommentResponseDto createComment(Long scheduleId, Long userId, CommentRequestDto requestDto) {
+    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto) {
         // 일정 확인
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 일정입니다.")
         );
         Comment comment = new Comment();
         comment.setContent(requestDto.getContent());
-        comment.setUserId(userId);
+        comment.setUserId(requestDto.getUserId());
         comment.setSchedule(schedule);
 
         commentRepository.save(comment);
@@ -40,12 +40,17 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentContentResponseDto updateComment(Long commentId, Long userId, CommentRequestDto requestDto) {
+    public CommentContentResponseDto updateComment(Long scheduleId, Long commentId, CommentRequestDto requestDto) {
+        // 일정 확인
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 일정입니다.")
+        );
+        // 댓글 확인
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
         );
-
-        if (!Objects.equals(comment.getUserId(), userId)) {
+        // 사용자 확인
+        if (!Objects.equals(comment.getUserId(), requestDto.getUserId())) {
             throw new IllegalArgumentException("잘못된 사용자 ID입니다.");
         }
 
@@ -53,11 +58,16 @@ public class CommentService {
         return new CommentContentResponseDto(requestDto.getContent());
     }
 
-    public HttpStatusResponseDto deleteComment(Long commentId, Long userId) {
+    public HttpStatusResponseDto deleteComment(Long scheduleId, Long commentId, Long userId) {
+        // 일정 확인
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 일정입니다.")
+        );
+        // 댓글 확인
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
         );
-
+        // 사용자 확인
         if (!Objects.equals(comment.getUserId(), userId)) {
             throw new IllegalArgumentException("잘못된 사용자 ID입니다.");
         }

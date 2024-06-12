@@ -27,22 +27,22 @@ import java.util.List;
 @Entity
 @Table
 @EntityListeners(AuditingEntityListener.class) // + Main 클래스 @EnableJapAuditing
-public class Schedule {
+public class Schedule extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, length = 200)
     private String title;
+
     @Column
     private String content;
+
     @Column
     private String responsibility;
+
     @Column(nullable = false)
     private String passKey;
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime creationDate;
 
     // 1:N Comment 에 의해 양방향 설정
     // 단방향이어도 로직에 문제가 없는지 고려후 삭제

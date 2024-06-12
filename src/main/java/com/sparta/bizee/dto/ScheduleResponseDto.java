@@ -11,13 +11,13 @@ public class ScheduleResponseDto {
     private final String title;
     private final String content;
     private final String responsibility;
-    private final LocalDateTime creationDate;
+    private final LocalDateTime createdAt;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
         this.responsibility = schedule.getResponsibility();
-        this.creationDate = schedule.getCreationDate();
+        this.createdAt = schedule.getCreatedAt();
     }
 }
