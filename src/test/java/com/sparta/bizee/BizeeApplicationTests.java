@@ -1,7 +1,7 @@
 package com.sparta.bizee;
 
-import com.sparta.bizee.Repository.CommentRepository;
-import com.sparta.bizee.Repository.ScheduleRepository;
+import com.sparta.bizee.repository.CommentRepository;
+import com.sparta.bizee.repository.ScheduleRepository;
 import com.sparta.bizee.entity.Comment;
 import com.sparta.bizee.entity.Schedule;
 import org.junit.jupiter.api.DisplayName;

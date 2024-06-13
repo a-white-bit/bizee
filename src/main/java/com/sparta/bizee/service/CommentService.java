@@ -1,7 +1,7 @@
 package com.sparta.bizee.service;
 
-import com.sparta.bizee.Repository.CommentRepository;
-import com.sparta.bizee.Repository.ScheduleRepository;
+import com.sparta.bizee.repository.CommentRepository;
+import com.sparta.bizee.repository.ScheduleRepository;
 import com.sparta.bizee.dto.CommentContentResponseDto;
 import com.sparta.bizee.dto.CommentRequestDto;
 import com.sparta.bizee.dto.CommentResponseDto;

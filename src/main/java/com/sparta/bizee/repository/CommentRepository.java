@@ -1,4 +1,4 @@
-package com.sparta.bizee.Repository;
+package com.sparta.bizee.repository;
 
 import com.sparta.bizee.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

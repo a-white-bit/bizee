@@ -1,6 +1,6 @@
 package com.sparta.bizee.service;
 
-import com.sparta.bizee.Repository.ScheduleRepository;
+import com.sparta.bizee.repository.ScheduleRepository;
 import com.sparta.bizee.dto.ScheduleDeleteRequestDto;
 import com.sparta.bizee.dto.ScheduleRequestDto;
 import com.sparta.bizee.dto.ScheduleResponseDto;

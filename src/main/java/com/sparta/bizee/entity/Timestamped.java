@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class) // + Main 클래스 @EnableJapAuditing
 @Getter
 public abstract class Timestamped {
     @CreationTimestamp

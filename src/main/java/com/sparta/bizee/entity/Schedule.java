@@ -28,7 +28,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-@EntityListeners(AuditingEntityListener.class) // + Main 클래스 @EnableJapAuditing
 public class Schedule extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
