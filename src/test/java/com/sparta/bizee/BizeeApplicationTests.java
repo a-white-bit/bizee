@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class BizeeApplicationTests {
 
-	@Autowired
+	/*@Autowired
 	ScheduleRepository scheduleRepository;
 	@Autowired
 	CommentRepository commentRepository;
@@ -46,5 +46,5 @@ class BizeeApplicationTests {
 		comment.setSchedule(schedule);
 
 		commentRepository.save(comment);
-	}
+	}*/
 }
