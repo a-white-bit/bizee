@@ -4,8 +4,8 @@ import com.sparta.bizee.dto.response.ResponseCodeEnum;
 import lombok.Getter;
 
 @Getter
-public class InvalidFileTypeException extends CustomException {
-    public InvalidFileTypeException(ResponseCodeEnum code) {
+public class ScheduleServiceException extends CustomException {
+    public ScheduleServiceException(ResponseCodeEnum code) {
         super(code);
     }
 }

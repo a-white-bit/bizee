@@ -1,98 +1,94 @@
 package com.sparta.bizee.security;
 
-import com.sparta.bizee.util.JwtUtil;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/*
+ * Security Configuration 클래스
+ * 인증/인가를 SESSION 방식이 아닌 JWT 방식으로 대체하였으므로
+ * 재정의한 필터를 적용해야 함
+ * 1. Filter Bean 등록
+ * 2. Filter Chain 에 필터 등록. 필터 끼워 넣기
+ */
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
+@EnableWebSecurity // Spring Security 사용
 public class WebSecurityConfig {
 
-//    private final JwtUtil jwtUtil;
-//    private final UserDetailsServiceImpl userDetailsService;
-//    private final AuthenticationConfiguration authenticationConfiguration;
-//
-//    public WebSecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration) {
-//        this.jwtUtil = jwtUtil;
-//        this.userDetailsService = userDetailsService;
-//        this.authenticationConfiguration = authenticationConfiguration;
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-//        return configuration.getAuthenticationManager();
-//    }
-//
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-//        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
-//        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-//        return filter;
-//    }
-//
-//    @Bean
-//    public JwtAuthorizationFilter jwtAuthorizationFilter() {
-//        return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
-//    }
+    // Bean 객체 authenticationConfiguration 으로부터 인증매니저를 get 가능 : getAuthenticationManager()
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
+    // Manager Bean 등록
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    // PasswordEncoder 필요
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // JWT 인증 필터 Bean 등록
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
+
+        // manager 객체 세팅
+        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        return filter;
+    }
+
+    // JWT 인가 필터 Bean 등록
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter(userDetailsService);
+    }
+
+    // 시큐리티 필터 체인 설정 Bean 등록
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        // CSRF 설정
-//        http.csrf((csrf) -> csrf.disable());
-//
-//        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
-//        http.sessionManagement((sessionManagement) ->
-//                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        );
-//
-//        http.authorizeHttpRequests((authorizeHttpRequests) ->
-//                authorizeHttpRequests
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-//                        .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-//                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
-//        );
-//
-//        http.formLogin((formLogin) ->
-//                formLogin
-//                        .loginPage("/api/user/login-page").permitAll()
-//        );
-//
-//        // 필터 관리
-//        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        // 접근 불가 페이지 설정하기
-//        http.exceptionHandling((exceptionHandling) ->
-//                exceptionHandling.accessDeniedPage("/forbidden.html")
-//        );
+        http
+                // CSRF 설정: CSRF 보호 비활성
+                .csrf((csrf) -> csrf.disable())
+                //.csrf(AbstractHttpConfigurer::disable) 와 동일, 람다 <-> 메소드 참조의 차이, 스타일-가독성 고려.
 
+                // 세션을 사용하지 않도록 정책 STATELESS 로 변경
+                .sessionManagement((sessionManagement) -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        // CSRF 설정
-        http.csrf((csrf) -> csrf.disable());
+                // 인가 설정
+                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                        .requestMatchers("/register", "/login").permitAll()
+                        .anyRequest().authenticated())
 
-        http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/register").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
-        );
+                // 기본 폼 로그인을 비활성화, 중복 인증 방지
+                .formLogin((formLogin) -> formLogin.disable())
 
-        // security 제공 디폴트 로그인 html 페이지
-        // http.formLogin(Customizer.withDefaults());
+                // 인가 실패시 처리되는 핸들러
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .accessDeniedHandler(customAccessDeniedHandler) // 접근 거부(인가 실패) 시 처리
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)) // 인증 실패 시 처리
 
-        http.formLogin((formLogin) -> formLogin.loginProcessingUrl("/login").permitAll()
-        );
+                // 커스텀 필터 끼우기
+                // JWT 인가필터 -> JWT 인증필터 -> UsernamePasswordAuthenticationFilter 순으로 설정
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+
 
         return http.build();
     }

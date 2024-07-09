@@ -1,15 +1,14 @@
-package com.sparta.bizee.dto;
+package com.sparta.bizee.dto.request;
 
-import com.sparta.bizee.entity.UserAuthEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Length;
-
-import java.util.Objects;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class RegisterRequestDto {
     private String nickname;
 

@@ -1,11 +1,15 @@
 package com.sparta.bizee.controller;
 
-import com.sparta.bizee.dto.ScheduleDeleteRequestDto;
-import com.sparta.bizee.dto.ScheduleRequestDto;
-import com.sparta.bizee.dto.ScheduleResponseDto;
+import com.sparta.bizee.dto.request.ScheduleDeleteRequestDto;
+import com.sparta.bizee.dto.request.ScheduleRequestDto;
+import com.sparta.bizee.dto.response.ScheduleResponseDto;
+import com.sparta.bizee.dto.response.ResponseCodeEnum;
+import com.sparta.bizee.dto.response.ResponseDto;
 import com.sparta.bizee.service.ScheduleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,21 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Validated // @PathVariable 유효성 검사 위함
 @RestController // 각 메서드마다 @ResponseBody 한 것과 같음
-@RequestMapping("/schedule")
+@RequiredArgsConstructor
 public class ScheduleController {
 
     // Memo Control <-> Service 분리
-    ScheduleService scheduleService;
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
+    private final ScheduleService scheduleService;
+    private ResponseCodeEnum status;
 
     /* -------------(학습용 메모)---------------
     * Controller Mapping Parameter annotation 구분하기!!
@@ -41,38 +42,51 @@ public class ScheduleController {
     -----------------------------------------*/
 
     // 일정 등록
-    // 반환: Dto
-    //@ResponseBody : HTTP 응답데이터(body)에 자바 객체가 매핑되어 전달
-    @PostMapping
-    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
-        return scheduleService.createSchedule(requestDto);
+    // @ResponseBody : HTTP 응답데이터(body)에 자바 객체가 매핑되어 전달
+    // 클래스 애너테이션 @RestController 로 대체함
+    @PostMapping("/schedules")
+    public ResponseEntity<ResponseDto> createSchedule(
+            @Valid @RequestBody ScheduleRequestDto requestDto) {
+        status = ResponseCodeEnum.SUCCESS;
+        ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(requestDto);
+        return new ResponseDto(status, scheduleResponseDto).createResponseEntity();
     }
 
     // 일정 조회
-    // 반환: Dto
-    @GetMapping("/{id}")
-    public ScheduleResponseDto getSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable long id) {
-        return scheduleService.getSchedule(id);
+    @GetMapping("/schedules/{id}")
+    public ResponseEntity<ResponseDto> getSchedule(
+            @NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable Long id) {
+        status = ResponseCodeEnum.SUCCESS;
+        ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(id);
+        return new ResponseDto(status, scheduleResponseDto).createResponseEntity();
     }
 
     // 일정 전체 조회
-    // 반환: Dto 리스트
-    @GetMapping("/all")
-    public List<ScheduleResponseDto> getSchedules() {
-        return scheduleService.getSchedules();
+    @GetMapping("/schedules/all")
+    public ResponseEntity<ResponseDto> getSchedules() {
+        status = ResponseCodeEnum.SUCCESS;
+        List<ScheduleResponseDto> scheduleResponseDto = scheduleService.getSchedules();
+        return new ResponseDto(status, scheduleResponseDto).createResponseEntity();
     }
 
     // 일정 수정
-    // 반환: Dto
-    @PutMapping("/{id}")
-    public ScheduleResponseDto updateSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
-        return scheduleService.updateSchedule(id, requestDto);
+    @PutMapping("/schedules/{id}")
+    public ResponseEntity<ResponseDto> updateSchedule(
+            @NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable Long id,
+            @Valid @RequestBody ScheduleRequestDto requestDto) {
+        status = ResponseCodeEnum.SUCCESS;
+        ScheduleResponseDto scheduleResponseDto = scheduleService.updateSchedule(id, requestDto);
+        return new ResponseDto(status, scheduleResponseDto).createResponseEntity();
     }
 
     // 일정 삭제
-    // 반환: id
-    @DeleteMapping("/{id}")
-    public long deleteSchedule(@NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable long id, @Valid @RequestBody ScheduleDeleteRequestDto requestDto) {
-        return scheduleService.deleteSchedule(id, requestDto);
+    @DeleteMapping("/schedules/{id}")
+    public ResponseEntity<ResponseDto> deleteSchedule(
+            @NotNull(message = "ID는 필수 입력사항입니다.") @PathVariable Long id,
+            @Valid @RequestBody ScheduleDeleteRequestDto requestDto) {
+
+        status = ResponseCodeEnum.SUCCESS;
+        scheduleService.deleteSchedule(id, requestDto);
+        return new ResponseDto(status).createResponseEntity();
     }
 }

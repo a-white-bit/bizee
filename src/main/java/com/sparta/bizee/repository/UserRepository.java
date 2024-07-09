@@ -1,6 +1,5 @@
 package com.sparta.bizee.repository;
 
-
 import com.sparta.bizee.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

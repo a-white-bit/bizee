@@ -1,18 +1,20 @@
 package com.sparta.bizee.entity;
 
-import com.sparta.bizee.dto.RegisterRequestDto;
+import com.sparta.bizee.dto.request.RegisterRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "user")
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +30,11 @@ public class User extends Timestamped {
 
     private String authority;
 
-    public User(RegisterRequestDto req, String password) {
-        this.nickname = req.getNickname();
-        this.username = req.getUsername();
+    @Builder
+    public User(String nickname, String username, String password, String authority) {
+        this.nickname = nickname;
+        this.username = username;
         this.password = password;
-        if (req.isAdmin()) {
-            this.authority = UserAuthEnum.ADMIN.getAuthority();
-        } else {
-            this.authority = UserAuthEnum.USER.getAuthority();
-        }
+        this.authority = authority;
     }
 }

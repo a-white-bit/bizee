@@ -1,16 +1,16 @@
-package com.sparta.bizee.dto;
+package com.sparta.bizee.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
-@AllArgsConstructor
-public class AuthRequestDto {
+@NoArgsConstructor
+public class LoginRequestDto {
     @NotBlank(message = "사용자 이름을 입력해주세요.")
     private String username;
+
     @NotBlank(message = "암호를 입력해주세요.")
     private String password;
 }

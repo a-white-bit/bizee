@@ -4,8 +4,8 @@ import com.sparta.bizee.dto.response.ResponseCodeEnum;
 import lombok.Getter;
 
 @Getter
-public class InvalidFileTypeException extends CustomException {
-    public InvalidFileTypeException(ResponseCodeEnum code) {
+public class CommentServiceException extends CustomException {
+    public CommentServiceException(ResponseCodeEnum code) {
         super(code);
     }
 }

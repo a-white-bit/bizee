@@ -1,7 +1,10 @@
 package com.sparta.bizee.controller;
 
+import com.sparta.bizee.dto.response.ResponseCodeEnum;
+import com.sparta.bizee.dto.response.ResponseDto;
 import com.sparta.bizee.exception.InvalidFileTypeException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,12 +33,12 @@ public class FileController {
     ** key: "image", value: JPG, JPEG, PNG 이미지 파일
     */
     @PostMapping("/upload")
-    public String imageUpload(@RequestParam("image") MultipartFile file) throws InvalidFileTypeException, IOException {
+    public ResponseEntity<ResponseDto> imageUpload(@RequestParam("image") MultipartFile file) throws InvalidFileTypeException, IOException {
 
         // 확장자 구별
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         if (!"jpg".equals(extension) && !"jpeg".equals(extension) && !"png".equals(extension)) {
-            throw new InvalidFileTypeException("이미지 파일이 아닙니다.");
+            throw new InvalidFileTypeException(ResponseCodeEnum.INVALID_INPUT_FILE);
         }
 
         // 저장할 파일 경로(path) 만들기
@@ -53,6 +56,8 @@ public class FileController {
             e.getStackTrace();
             throw new IOException("파일 저장에 실패했습니다. :" + file.getOriginalFilename());
         }
-        return "서버에 저장된 파일: " + file.getOriginalFilename();
+
+        String response = "서버에 저장된 파일: " + file.getOriginalFilename();
+        return new ResponseDto(ResponseCodeEnum.SUCCESS, response).createResponseEntity();
     }
 }
